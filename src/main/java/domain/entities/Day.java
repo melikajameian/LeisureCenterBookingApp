@@ -1,4 +1,6 @@
-package Entities;
+package domain.entities;
+
+import domain.enums.DayOfWeek;
 
 import java.util.Date;
 import java.util.HashSet;

@@ -1,5 +1,7 @@
-package Entities;
+package domain.entities;
 
+
+import domain.enums.TimeSlot;
 
 public class Session {
     Lesson lesson;

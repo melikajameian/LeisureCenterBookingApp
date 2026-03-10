@@ -1,4 +1,6 @@
-package Entities;
+package domain.entities;
+
+import domain.enums.LessonType;
 
 import java.util.HashSet;
 

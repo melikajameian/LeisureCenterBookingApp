@@ -1,4 +1,6 @@
-package Entities;
+package domain.entities;
+
+import domain.enums.BookingStatus;
 
 import java.time.LocalDateTime;
 

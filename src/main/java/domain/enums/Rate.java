@@ -1,4 +1,4 @@
-package Entities;
+package domain.enums;
 
 public enum Rate {
     very_dissatisfied("Very dissatisfied",1),

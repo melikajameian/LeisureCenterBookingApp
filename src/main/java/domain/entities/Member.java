@@ -1,4 +1,4 @@
-package Entities;
+package domain.entities;
 
 import java.util.UUID;
 

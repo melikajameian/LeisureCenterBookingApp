@@ -9,7 +9,7 @@ public class BookingMenu {
         String bookingMenuInput = scanner.nextLine();
         switch (bookingMenuInput){
             case "1":
-                bookClassByOptions();
+                bookClassByOptions(scanner);
                 break;
             case "2":
                 System.out.println("2");
@@ -27,7 +27,17 @@ public class BookingMenu {
                 ConsoleMessages.showWrongInputMessage("between 1-5");
         }
     }
-    public static void bookClassByOptions() {
+    public static void bookClassByOptions(Scanner scanner) {
         System.out.println("1- Book by lesson\n2- Book by time slots");
+        String classByOptionInput = scanner.nextLine();
+
+        if (classByOptionInput.equals("1")){
+
+        }else if (classByOptionInput.equals("2")){
+
+        }else{
+            ConsoleMessages.showWrongInputMessage("1 or 2");
+        }
+
     }
 }

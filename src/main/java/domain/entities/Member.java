@@ -3,9 +3,9 @@ package domain.entities;
 import java.util.UUID;
 
 public class Member {
-    String id;
-    String firstName;
-    String lastName;
+    private final String id;
+    private  String firstName;
+    private  String lastName;
 
     public Member( String firstName,String lastName) {
         this.id =  UUID.randomUUID().toString();
@@ -14,5 +14,23 @@ public class Member {
 
     }
 
+    public String getId() {
+        return id;
+    }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 }

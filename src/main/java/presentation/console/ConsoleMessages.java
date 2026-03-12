@@ -15,4 +15,8 @@ public class ConsoleMessages {
     public static void showWrongInputMessage(String optionRange) {
         System.out.println("wrong input! you should type "+ optionRange +", try again.");
     }
+
+    public static void showBackOption() {
+        System.out.println("0- back");
+    }
 }

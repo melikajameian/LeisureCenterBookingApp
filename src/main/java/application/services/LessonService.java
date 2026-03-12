@@ -3,7 +3,9 @@ package application.services;
 import domain.entities.Lesson;
 import domain.enums.LessonType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class LessonService {
@@ -31,6 +33,10 @@ public class LessonService {
 
     public Map<LessonType, Lesson> getLessonsMap() {
         return lessons;
+    }
+
+    public List<Lesson> getLessons() {
+        return new ArrayList<>(lessons.values());
     }
 
 }

@@ -4,13 +4,25 @@ package domain.entities;
 import domain.enums.TimeSlot;
 
 public class Session {
-    Lesson lesson;
-    Day day;
-    TimeSlot timeSlot;
+    private final Lesson lesson;
+    private final SessionDate day;
+    private final TimeSlot timeSlot;
 
-    public Session(Lesson lesson, Day day, TimeSlot timeSlot) {
+    public Session(Lesson lesson, SessionDate day, TimeSlot timeSlot) {
         this.lesson = lesson;
         this.day = day;
         this.timeSlot = timeSlot;
+    }
+
+    public Lesson getLesson() {
+        return lesson;
+    }
+
+    public SessionDate getSessionDate() {
+        return day;
+    }
+
+    public TimeSlot getTimeSlot() {
+        return timeSlot;
     }
 }

@@ -1,11 +1,13 @@
 package domain.entities;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class Member {
     private final String id;
     private  String firstName;
     private  String lastName;
+    private ArrayList<Booking> bookings;
 
     public Member( String firstName,String lastName) {
         this.id =  UUID.randomUUID().toString();

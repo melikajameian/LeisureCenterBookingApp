@@ -1,22 +1,23 @@
 package application.services;
 
 import domain.entities.Member;
+import domain.repositories.MemberRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MemberService {
-    private final List<Member> members;   // ← field
+    private MemberRepository memberRepository;
 
-    public MemberService() {
-        this.members = new ArrayList<Member>();        // ← map created here
+    public MemberService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
     }
 
     public void createMember(String firstName, String lastName) {
-        members.add(new Member(firstName, lastName));
+        memberRepository.add(new Member(firstName, lastName));
     }
 
     public List<Member> getMembers() {
-        return members;
+        return memberRepository.getAll();
     }
 }

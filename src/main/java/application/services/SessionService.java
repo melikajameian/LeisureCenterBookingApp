@@ -4,28 +4,31 @@ import domain.entities.SessionDate;
 import domain.entities.Lesson;
 import domain.entities.Session;
 import domain.enums.TimeSlot;
+import domain.repositories.SessionRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SessionService {
-    private final List<Session> sessions ;
 
-    public SessionService() {
-        this.sessions = new ArrayList<>();
+    private SessionRepository sessionRepository;
+
+    public SessionService(SessionRepository sessionRepository) {
+        this.sessionRepository = sessionRepository;
     }
 
-    public void createSession(Lesson lesson, SessionDate day, TimeSlot timeSlot){
-        for(Session session : sessions){
-            if(session.getLesson().getLessonType() ==lesson.getLessonType()){
-            }
+    public void createSession(Lesson lesson, SessionDate date, TimeSlot timeSlot){
+        if (sessionRepository.exists(lesson, date, timeSlot)) {
+            throw new IllegalStateException
+                    ("Session already exists for this lesson, date, and time");
         }
 
-        sessions.add(new Session(lesson, day, timeSlot));
-    }
+
+        Session session = new Session(lesson, date, timeSlot);
+        sessionRepository.add(session);    }
 
 
     public List<Session> getSessions(){
-        return sessions;
+        return sessionRepository.getAll();
     }
 }

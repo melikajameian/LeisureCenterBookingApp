@@ -11,37 +11,26 @@ public class Booking {
     private Session session;
     private Review review;
 
-    private Booking() {
-    }
-
-    public Booking(Member member, BookingStatus status ) {
+    public Booking(Member member) {
         this.bookingId = generateBookingId(member);
         this.member = member;
-        this.status = status;
-    }
-
-    public Member getMember() {
-        return member;
-    }
-
-    public BookingStatus getStatus() {
-        return status;
-    }
-
-    public Session getSession() {
-        return session;
-    }
-
-    public Review getReview() {
-        return review;
+        this.status = BookingStatus.Booked;
     }
 
     public String getBookingId() {
         return bookingId;
     }
 
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
+    // Generates a unique id for booking
     private static String generateBookingId(Member member) {
-        return member.getFirstName().charAt(0) + member.getId().substring(0, 2) + member.getLastName().charAt(0) + LocalDateTime.now().getNano();
+        return member.getFirstName().charAt(0)
+                + member.getId().substring(0, 2)
+                + member.getLastName().charAt(0)
+                + LocalDateTime.now().getNano();
     }
 }
 

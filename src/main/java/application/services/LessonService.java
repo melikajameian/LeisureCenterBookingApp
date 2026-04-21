@@ -2,6 +2,7 @@ package application.services;
 
 import domain.entities.Lesson;
 import domain.enums.LessonType;
+import domain.repositories.LessonRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,33 +11,30 @@ import java.util.Map;
 
 public class LessonService {
 
-    private final Map<LessonType, Lesson> lessons;   // ← field
+    private LessonRepository lessonRepository;
 
-    public LessonService() {
-        this.lessons = new HashMap<>();        // ← map created here
+    public LessonService(LessonRepository lessonRepository) {
+        this.lessonRepository = lessonRepository;
     }
 
     public void createLesson(LessonType type, double price) {
 
-        if (lessons.containsKey(type)) {
+        if (lessonRepository.exists(type)) {
             throw new IllegalStateException("Lesson already exists for this type");
         }
 
         Lesson lesson = new Lesson(type, price);
-        lessons.put(type, lesson);
+        lessonRepository.add(lesson);
 
     }
 
     public Lesson getLesson(LessonType type) {
-        return lessons.get(type);
+        return lessonRepository.getByType(type);
     }
 
-    public Map<LessonType, Lesson> getLessonsMap() {
-        return lessons;
-    }
 
     public List<Lesson> getLessons() {
-        return new ArrayList<>(lessons.values());
+        return lessonRepository.getLessons() ;
     }
 
 }

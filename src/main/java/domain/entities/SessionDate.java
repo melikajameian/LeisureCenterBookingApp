@@ -1,24 +1,19 @@
 package domain.entities;
 
 import domain.enums.DayOfWeek;
+import domain.enums.Month;
 
 public class SessionDate {
-    private final int month;
+    private final Month month;
     private final int dayNumberInMonth;
     private final DayOfWeek dayOfWeek;
 
-    public SessionDate(int month, int dayNumberInMonth) {
-        this.month = validateMonth(month);
+    public SessionDate(Month month, int dayNumberInMonth) {
+        this.month = month;
         this.dayNumberInMonth = dayNumberInMonth;
         this.dayOfWeek = calculateDayOfWeek(dayNumberInMonth);
     }
 
-    private int validateMonth(int month){
-        if(month < 1 || month > 12){
-            throw new IllegalArgumentException("Invalid month");
-        }
-        return month;
-    }
 
     private DayOfWeek calculateDayOfWeek(int dayOfMonth) {
         if (dayOfMonth == 1 || dayOfMonth == 8 || dayOfMonth == 15 || dayOfMonth == 22) {
@@ -30,7 +25,7 @@ public class SessionDate {
         throw new IllegalArgumentException("Invalid coursework day: " + dayOfMonth);
     }
 
-    public int getMonth() {
+    public Month getMonth() {
         return month;
     }
 
@@ -43,6 +38,6 @@ public class SessionDate {
     }
 
     public String getFullDateString(){
-        return dayNumberInMonth + "/" + month + "/" + "2026" + " " + dayOfWeek.name().toLowerCase();
+        return dayNumberInMonth + " " + month.monthName + " " + dayOfWeek.name().toLowerCase();
     }
 }

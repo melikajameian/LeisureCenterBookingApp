@@ -6,14 +6,13 @@ import domain.entities.Lesson;
 import domain.entities.Session;
 import domain.entities.SessionDate;
 import domain.enums.LessonType;
+import domain.enums.Month;
 import domain.enums.TimeSlot;
 
 import java.util.Random;
 
 
 public class SessionFactory {
-    public SessionFactory() {
-    }
 
     public static void createSessions(SessionService sessionService, LessonService lessonService) {
         Lesson yoga = lessonService.getLesson(LessonType.Yoga);
@@ -29,13 +28,14 @@ public class SessionFactory {
         TimeSlot evening = TimeSlot.evening;
 
         int[] monthDays = {1, 2, 8, 9, 15, 16, 22, 23};
+        Month[] months = {Month.JUNE,Month.JULY};
 
-        for(int month = 1; month <= 2; month++){
-            for(int index = 0; index < monthDays.length; index++){
-                sessionService.createSession(lessons[generate.nextInt(5)], new SessionDate(month,monthDays[index]),morning);
-                sessionService.createSession(lessons[generate.nextInt(5)], new SessionDate(month,monthDays[index]),afternoon);
-                sessionService.createSession(lessons[generate.nextInt(5)], new SessionDate(month,monthDays[index]),evening);
-
+        // Generating sessions for two weeks
+        for(Month month : months ){
+            for (int monthDay : monthDays) {
+                sessionService.createSession(lessons[generate.nextInt(5)], new SessionDate(month, monthDay), morning);
+                sessionService.createSession(lessons[generate.nextInt(5)], new SessionDate(month, monthDay), afternoon);
+                sessionService.createSession(lessons[generate.nextInt(5)], new SessionDate(month, monthDay), evening);
             }
         }
     }

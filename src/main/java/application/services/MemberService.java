@@ -20,4 +20,8 @@ public class MemberService {
     public List<Member> getMembers() {
         return memberRepository.getAll();
     }
+
+    public Member getMemberById(String id) {
+        return memberRepository.getById(id);
+    }
 }

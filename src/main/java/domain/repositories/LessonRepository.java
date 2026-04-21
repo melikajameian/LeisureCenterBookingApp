@@ -4,11 +4,12 @@ import domain.entities.Lesson;
 import domain.enums.LessonType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class LessonRepository {
-    private Map<LessonType, Lesson> lessons;
+    private final Map<LessonType, Lesson> lessons = new HashMap<>();
 
     public void add(Lesson lesson) {
         lessons.put(lesson.getLessonType(), lesson);

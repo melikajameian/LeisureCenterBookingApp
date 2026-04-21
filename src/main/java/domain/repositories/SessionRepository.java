@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SessionRepository {
-    private List<Session> sessions ;
+    private List<Session> sessions = new ArrayList<>();;
 
     public void add(Session session) {
         sessions.add(session);
@@ -26,5 +26,11 @@ public class SessionRepository {
                                 && session.getSessionDate().equals(date)
                                 && session.getTimeSlot() == timeSlot
                 );
+    }
+
+    public List<Session> findByLesson(Lesson lesson) {
+        return sessions.stream()
+                .filter(s -> s.getLesson().equals(lesson))
+                .toList();
     }
 }

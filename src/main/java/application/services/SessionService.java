@@ -31,4 +31,8 @@ public class SessionService {
     public List<Session> getSessions(){
         return sessionRepository.getAll();
     }
+
+    public List<Session> getSessionsByLesson(Lesson lesson) {
+        return sessionRepository.findByLesson(lesson);
+    }
 }

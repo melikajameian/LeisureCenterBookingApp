@@ -1,8 +1,11 @@
 package presentation.console;
 
+import application.services.BookingService;
 import application.services.LessonService;
+import application.services.MemberService;
 import application.services.SessionService;
 import domain.entities.Lesson;
+import domain.entities.Member;
 import domain.entities.Session;
 import domain.entities.SessionDate;
 
@@ -14,10 +17,14 @@ public class BookingMenu {
     private final Scanner scanner;
     private final SessionService sessionService;
     private final LessonService lessonService;
+    private final BookingService bookingService;
+    private final MemberService memberService;
 
-    public BookingMenu(SessionService sessionService, LessonService lessonService, Scanner scanner) {
+    public BookingMenu(SessionService sessionService, LessonService lessonService, Scanner scanner, BookingService bookingService, MemberService memberService) {
         this.sessionService = sessionService;
         this.lessonService = lessonService;
+        this.bookingService = bookingService;
+        this.memberService = memberService;
         this.scanner = scanner;
     }
 
@@ -53,9 +60,10 @@ public class BookingMenu {
 
         var sessions = sessionService.getSessions();
         var lessons = lessonService.getLessons();
+        var members = memberService.getMembers();
 
         if (classByOptionInput.equals("1")) {
-            BookByLessonMenu(lessons, sessions);
+            BookByLessonMenu(lessons, sessions, members);
         } else if (classByOptionInput.equals("2")) {
             BookByDateMenu(sessions);
         } else {
@@ -65,38 +73,33 @@ public class BookingMenu {
     }
 
     private void BookByDateMenu(List<Session> sessions) {
-        while(true){
-        int counter = 1;
+        while (true) {
+            int counter = 1;
 
-        for(Session session : sessions) {
-            System.out.println(
-                    counter + "- " +
-                            session.getSessionDate().getFullDateString()+
-                            " | " + session.getLesson().getLessonType().toString() +
-                            " | " + session.getTimeSlot()
-            );
-            counter++;
-        }
-            int selectedOption ;
+            for (Session session : sessions) {
+                System.out.println(
+                        counter + "- " +
+                                session.getSessionDate().getFullDateString() +
+                                " | " + session.getLesson().getLessonType().toString() +
+                                " | " + session.getTimeSlot()
+                );
+                counter++;
+            }
             String number = scanner.nextLine();
-            try {
-                selectedOption = Integer.parseInt(number);
-                if (selectedOption < 0 || selectedOption > sessions.size()) {
-                    ConsoleMessages.showWrongInputMessage("a number between options available");
-                } else if (selectedOption == 0) {
-                    bookClassByOptions();
-                }else{
-                    //implement
-                }
-            }catch (NumberFormatException e){
-                ConsoleMessages.showWrongInputMessage("a number");
-
+            var sessionIndex = catchNumberFormatException(number, sessions.size());
+            if (sessionIndex == -1) {
+                break;
+            }
+            if (sessionIndex == 0) {
+                bookClassByOptions();
+            } else {
+                //implement
             }
 
         }
     }
 
-    private void BookByLessonMenu(List<Lesson> lessons, List<Session> sessions) {
+    private void BookByLessonMenu(List<Lesson> lessons, List<Session> sessions, List<Member> members) {
         while (true) {
             int counter = 1;
             ConsoleMessages.showSelectOptionMessage("");
@@ -107,51 +110,68 @@ public class BookingMenu {
             ConsoleMessages.showBackOption();
             System.out.println("*** (Prices are per session.)");
             String selectedOption = scanner.nextLine();
-            try {
-                int number = Integer.parseInt(selectedOption);
-                if (number < 0 || number > lessons.size()) {
-                    ConsoleMessages.showWrongInputMessage("a number between options available");
-                } else if (number == 0) {
-                    bookClassByOptions();
-                }
-                else {
-                    Lesson selectedLesson = lessons.get(number - 1);
-                    var selectedLessonSessions = new ArrayList<Session>();
-                    for (Session session : sessions) {
-                        if (session.getLesson().equals(selectedLesson))
-                            selectedLessonSessions.add(session);
-                    }
-                    while (true) {
-                        System.out.println(selectedLesson.getLessonType().toString() + " sessions are as below");
-                        ConsoleMessages.showSelectOptionMessage("");
+            var lessonIndex = catchNumberFormatException(selectedOption, members.size());
+            if (lessonIndex == -1) {
+                BookByLessonMenu(lessons, sessions, members);
+            }
+            if (lessonIndex == 0) {
+                bookClassByOptions();
+            } else {
+                Lesson selectedLesson = lessons.get(lessonIndex - 1);
+                var selectedLessonSessions = sessionService.getSessionsByLesson(selectedLesson);
+                while (true) {
+                    System.out.println(selectedLesson.getLessonType().toString() + " sessions are as below");
+                    ConsoleMessages.showSelectOptionMessage("");
 
-                        counter = 1;
-                        for (Session session : selectedLessonSessions) {
-                            System.out.println(counter + "- " + session.getSessionDate().getFullDateString() + " -> " + session.getTimeSlot());
-                            counter++;
+                    counter = 1;
+                    for (Session session : selectedLessonSessions) {
+                        System.out.println(counter + "- " + session.getSessionDate().getFullDateString() + " -> " + session.getTimeSlot());
+                        counter++;
+                    }
+                    ConsoleMessages.showBackOption();
+
+                    selectedOption = scanner.nextLine();
+                    var sessionIndex = catchNumberFormatException(selectedOption, members.size());
+                    if (sessionIndex == -1||sessionIndex == 0) {
+                        break;
+                    }
+                    else {
+                        Session selectedSession = selectedLessonSessions.get(lessonIndex - 1);
+                        ConsoleMessages.showSelectOptionMessage("");
+                        System.out.println("(member you are booking for) \n");
+                        for (Member m : members) {
+                            System.out.println(members.indexOf(m)+1 + " - " + (m.toString()));
                         }
                         ConsoleMessages.showBackOption();
 
-                        selectedOption = scanner.nextLine();
-                        try {
-                            number = Integer.parseInt(selectedOption);
-                            if (number < 0 || number > selectedLessonSessions.size()) {
-                                ConsoleMessages.showWrongInputMessage("a number between options available");
-
-                            }else if (number == 0) {
-                                break;
-                            }else return;
-
-                        } catch (NumberFormatException e) {
-                            ConsoleMessages.showWrongInputMessage("a number");
+                        String memberIndexString = scanner.nextLine();
+                        var memberIndex = catchNumberFormatException(memberIndexString, members.size());
+                        if (memberIndex == -1||memberIndex == 0) {
+                            break;
                         }
+                        Member member = members.get(memberIndex);
+                        bookingService.createBooking(member, selectedSession);
+                        System.out.println("Booking has been created successfully \n");
                     }
                 }
-
-            } catch (NumberFormatException e) {
-                ConsoleMessages.showWrongInputMessage("a number");
             }
         }
+    }
+
+    private int catchNumberFormatException(String memberIndex, int listSize) {
+        int number = -1;
+        try {
+            number = Integer.parseInt(memberIndex);
+            if (number < 0 || number > listSize) {
+                ConsoleMessages.showWrongInputMessage("a number between options available");
+                return -1;
+            }
+        } catch (NumberFormatException e) {
+            ConsoleMessages.showWrongInputMessage("a number");
+        }
+
+
+        return number;
     }
 
 

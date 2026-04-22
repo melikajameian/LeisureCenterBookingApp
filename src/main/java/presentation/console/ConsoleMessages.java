@@ -1,22 +1,24 @@
 package presentation.console;
 
+import presentation.console.utils.ConsoleTextUtils;
+
 public class ConsoleMessages {
     public static void showWelcomingText() {
-        System.out.println("⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘                                 ⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘");
-        System.out.println("˶ᵔ ᵕ ᵔ˶ Welcome to The Furzefield Leisure Centre booking program. ˶ᵔ ᵕ ᵔ˶");
-        System.out.println("⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘                                 ⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘\n");
+        ConsoleTextUtils.printInYellow("⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘                                 ⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘");
+        ConsoleTextUtils.printInYellow("˶ᵔ ᵕ ᵔ˶ Welcome to The Furzefield Leisure Centre booking program. ˶ᵔ ᵕ ᵔ˶");
+        ConsoleTextUtils.printInYellow("⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘                                 ⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘\n");
     }
     public static void showSelectOptionMessage(String intro) {
-        if(!intro.isEmpty())System.out.println("\n⫘⫘⫘⫘ "+intro+" ⫘⫘⫘⫘");
-        System.out.println("Select an option: ");
+        if(!intro.isEmpty())ConsoleTextUtils.printInYellow("\n⫘⫘⫘⫘ "+intro+" ⫘⫘⫘⫘");
+        ConsoleTextUtils.printInYellow("Select an option: ");
 
     }
 
     public static void showWrongInputMessage(String optionRange) {
-        System.out.println("wrong input! you should type "+ optionRange +", try again.");
+        ConsoleTextUtils.printInRed("wrong input! you should type "+ optionRange +", try again."+ "\n");
     }
 
     public static void showBackOption() {
-        System.out.println("0- back");
+        ConsoleTextUtils.printInYellow("0- back");
     }
 }

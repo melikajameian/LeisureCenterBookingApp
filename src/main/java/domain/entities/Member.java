@@ -36,7 +36,8 @@ public class Member {
         this.lastName = lastName;
     }
 
-    public String toString(){
+    @Override
+    public String toString() {
         return firstName + " " + lastName;
     }
 }

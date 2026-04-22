@@ -1,8 +1,10 @@
 package presentation.console;
 
+import application.services.BookingService;
 import application.services.LessonService;
+import application.services.MemberService;
 import application.services.SessionService;
-import domain.entities.Session;
+import presentation.console.Booking.MainBookingMenu;
 
 import java.util.Scanner;
 
@@ -10,14 +12,17 @@ public class MainMenu {
     private final Scanner scanner;
     private final SessionService sessionService;
     private final LessonService lessonService;
-    private final BookingMenu bookingMenu;
+    private final BookingService bookingService;
+    private final MemberService memberService;
 
 
-    public MainMenu(Scanner scanner, SessionService sessionService, LessonService lessonService, BookingMenu bookingMenu) {
+    public MainMenu(Scanner scanner, SessionService sessionService, LessonService lessonService,
+                     MemberService memberService, BookingService bookingService) {
         this.scanner = scanner;
         this.lessonService = lessonService;
         this.sessionService = sessionService;
-        this.bookingMenu = bookingMenu;
+        this.bookingService = bookingService;
+        this.memberService = memberService;
 
     }
 
@@ -31,8 +36,7 @@ public class MainMenu {
 
 
             if(input.equals("1")) {
-                bookingMenu.showBookingMenu();
-                break;
+                new MainBookingMenu(sessionService,lessonService,scanner,bookingService,memberService);
             }
             else if(input.equals("2")) {
                 ReportMenu.showReportMenu();

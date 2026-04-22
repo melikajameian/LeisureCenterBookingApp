@@ -21,6 +21,18 @@ public class Booking {
         return bookingId;
     }
 
+    public Member getMember() {
+        return member;
+    }
+
+    public BookingStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(BookingStatus status) {
+        this.status = status;
+    }
+
     public void setSession(Session session) {
         this.session = session;
     }
@@ -31,6 +43,13 @@ public class Booking {
                 + member.getId().substring(0, 2)
                 + member.getLastName().charAt(0)
                 + LocalDateTime.now().getNano();
+    }
+
+    @Override
+    public String toString() {
+        return member.toString()
+                + ": \n       ⤷" + session.toString()
+                + " ›››› " + status.toString();
     }
 }
 

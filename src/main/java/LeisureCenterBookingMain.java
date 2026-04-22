@@ -7,7 +7,6 @@ import domain.repositories.LessonRepository;
 import domain.repositories.MemberRepository;
 import domain.repositories.SessionRepository;
 import infrastructure.factories.DataFactory;
-import presentation.console.BookingMenu;
 import presentation.console.MainMenu;
 
 import java.util.Scanner;
@@ -15,10 +14,10 @@ import java.util.Scanner;
 
 public class LeisureCenterBookingMain {
     public static void main(String[] args) {
-        LessonRepository  lessonRepository = new LessonRepository();
+        LessonRepository lessonRepository = new LessonRepository();
         MemberRepository memberRepository = new MemberRepository();
         SessionRepository sessionRepository = new SessionRepository();
-        BookingRepository  bookingRepository = new BookingRepository();
+        BookingRepository bookingRepository = new BookingRepository();
 
         LessonService lessonService = new LessonService(lessonRepository);
         MemberService memberService = new MemberService(memberRepository);
@@ -26,11 +25,10 @@ public class LeisureCenterBookingMain {
         BookingService bookingService = new BookingService(bookingRepository);
 
 
-        DataFactory.initialize(lessonService,memberService,sessionService);
+        DataFactory.initialize(lessonService, memberService, sessionService);
 
         Scanner scanner = new Scanner(System.in);
-        BookingMenu bookingMenu = new BookingMenu(sessionService,lessonService,scanner,bookingService,memberService);
-        MainMenu mainMenu = new MainMenu(scanner,sessionService,lessonService,bookingMenu);
+        MainMenu mainMenu = new MainMenu(scanner, sessionService, lessonService, memberService, bookingService );
 
 
         mainMenu.start();

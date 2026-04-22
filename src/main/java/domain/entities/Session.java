@@ -25,4 +25,11 @@ public class Session {
     public TimeSlot getTimeSlot() {
         return timeSlot;
     }
+
+    @Override
+    public String toString() {
+        return day.getFullDateString() +
+                " | " + lesson.getLessonType().toString() +
+                " | " + timeSlot;
+    }
 }

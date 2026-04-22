@@ -39,7 +39,7 @@ public class MainBookingMenu {
                     new AttendClassSession(memberService,scanner, bookingService);
                     break;
                 case "3":
-                    new ChangeClassSession();
+                    new ChangeClassSession(memberService,scanner, bookingService);
                     break;
                 case "4":
                     new CancelClassSession(memberService,scanner, bookingService);

@@ -5,9 +5,8 @@ import java.util.UUID;
 
 public class Member {
     private final String id;
-    private  String firstName;
-    private  String lastName;
-    private ArrayList<Booking> bookings;
+    private final String firstName;
+    private final String lastName;
 
     public Member( String firstName,String lastName) {
         this.id =  UUID.randomUUID().toString();
@@ -24,16 +23,8 @@ public class Member {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
     public String getLastName() {
         return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     @Override

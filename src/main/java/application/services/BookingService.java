@@ -45,7 +45,7 @@ public class BookingService {
         return true;
     }
 
-    public boolean markAsCanceled(String bookingId) {
+    public boolean markAsCanceled(String bookingId,Session session) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
 
@@ -58,6 +58,7 @@ public class BookingService {
         }
 
         booking.setStatus(BookingStatus.Cancelled);
+        session.removeBooking(booking);
         bookingRepository.save();
         return true;
     }

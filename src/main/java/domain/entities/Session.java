@@ -39,10 +39,15 @@ public class Session {
         bookings.add(booking);
     }
 
+    public void removeBooking(Booking booking) {
+        bookings.remove(booking);
+    }
+
     @Override
     public String toString() {
         return day.getFullDateString() +
                 " | " + lesson.getLessonType().toString() +
                 " | " + timeSlot;
     }
+
 }

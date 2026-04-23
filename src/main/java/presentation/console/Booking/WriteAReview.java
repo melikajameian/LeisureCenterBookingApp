@@ -4,6 +4,7 @@ import application.services.BookingService;
 import domain.entities.Booking;
 import domain.entities.Member;
 import domain.entities.Review;
+import domain.enums.BookingStatus;
 import domain.enums.Rate;
 import presentation.console.utils.ConsoleMessages;
 import presentation.console.utils.ConsoleTextUtils;
@@ -23,10 +24,19 @@ public class WriteAReview {
 
             var memberBookings = bookingService.getByMemberId(member.getId());
 
+            if (memberBookings.isEmpty()) {
+                ConsoleTextUtils.printInRed("⚠ ⚠ There are no classes for this member to write a review for. ⚠ ⚠");
+                return;
+            }
             Booking selectedBooking = MenuUtils.selectBookingFromList(memberBookings, scanner);
 
             if (selectedBooking == null) return;
             bookingService.markAsAttended(selectedBooking.getBookingId());
+
+            if (selectedBooking.getStatus() == BookingStatus.Cancelled) {
+                ConsoleTextUtils.printInRed("Sorry, you cannot write a review for a cancelled booking. \n");
+                return;
+            }
 
             if (selectedBooking.getReview() != null) {
                 ConsoleTextUtils.printInRed("Sorry, This booking already has a review. \n");
@@ -34,7 +44,7 @@ public class WriteAReview {
                 ConsoleTextUtils.printInYellow("Enter a rate number for this session(from 1-5)");
                 var rateInput = scanner.nextLine();
 
-                int rateNumber = MenuUtils.catchNumberFormatException(rateInput, 5);
+                int rateNumber = MenuUtils.parseMenuInput(rateInput, 5);
                 if (rateNumber == 0) return;
                 if (rateNumber == -1) continue;
 
@@ -46,6 +56,7 @@ public class WriteAReview {
                 } else {
                     selectedBooking.setReview(new Review(reviewDescriptionInput, Rate.getRateByNumber(rateNumber)));
                     ConsoleTextUtils.printInGreen("\n Your review has been saved successfully \n");
+                    return;
                 }
 
             }

@@ -23,7 +23,7 @@ public enum Month {
     public final String monthName;
 
 
-    public static Month getRateByNumber(int number){
+    public static Month getMonthByNumber(int number){
         for (Month m : Month.values()) {
             if (m.monthNumber == number) {
                 return m;

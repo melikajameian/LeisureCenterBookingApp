@@ -11,7 +11,7 @@ import java.util.List;
 
 public class SessionService {
 
-    private SessionRepository sessionRepository;
+    private final SessionRepository sessionRepository;
 
     public SessionService(SessionRepository sessionRepository) {
         this.sessionRepository = sessionRepository;
@@ -37,7 +37,7 @@ public class SessionService {
     }
 
     public List<Session> getSessionsByMonth(Month month) {
-        return sessionRepository.getAll().stream().filter(session -> session.getSessionDate().getMonth() == month).toList();
+        return sessionRepository.getAll().stream().filter(session -> session.getSessionDate().getMonth().equals(month)).toList();
     }
 
     public List<Booking> getAttendedBookings(Session session) {

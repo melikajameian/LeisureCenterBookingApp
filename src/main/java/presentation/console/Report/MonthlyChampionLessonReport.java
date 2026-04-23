@@ -14,7 +14,7 @@ public class MonthlyChampionLessonReport {
 
         System.out.print("Enter month number (e.g., 1=>february ): ");
         var input = scanner.nextLine();
-        int monthNumber = MenuUtils.catchNumberFormatException(input, Month.values().length);
+        int monthNumber = MenuUtils.parseMenuInput(input, Month.values().length);
         String result = reportService.getChampionReport(monthNumber);
 
         ConsoleTextUtils.printInGreen(result);

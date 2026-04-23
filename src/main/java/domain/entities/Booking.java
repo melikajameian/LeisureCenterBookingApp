@@ -8,7 +8,7 @@ public class Booking {
     private final String bookingId;
     private final Member member;
     private BookingStatus status;
-    private final Session session;
+    private Session session;
     private Review review;
 
     public Booking(Member member,Session session) {
@@ -48,6 +48,10 @@ public class Booking {
 
     public void setReview(Review review) {
         this.review = review;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
     }
 
     public Review getReview() {

@@ -42,7 +42,7 @@ public class CreateBooking {
             System.out.println("1- Book by lesson\n2- Book by date time");
             ConsoleMessages.showBackOption();
             String classByOptionInput = scanner.nextLine();
-            var inputNumber = MenuUtils.catchNumberFormatException(classByOptionInput, sessions.size());
+            var inputNumber = MenuUtils.parseMenuInput(classByOptionInput, sessions.size());
 
             if (inputNumber == 1) BookByLessonMenu(lessons, sessions, member, bookingId);
 
@@ -50,7 +50,7 @@ public class CreateBooking {
 
             else break;
 
-            if(bookingId!=null){
+            if (bookingId != null) {
                 return;
             }
         }
@@ -69,9 +69,9 @@ public class CreateBooking {
             ConsoleMessages.showBackOption();
 
             String input = scanner.nextLine();
-            int choice = MenuUtils.catchNumberFormatException(input, 2);
+            int choice = MenuUtils.parseMenuInput(input, 2);
 
-            if (choice == -1) break;
+            if (choice == -1) continue;
             if (choice == 0) return;
 
             DayOfWeek selectedDay = (choice == 1) ? DayOfWeek.SATURDAY : DayOfWeek.SUNDAY;
@@ -85,7 +85,7 @@ public class CreateBooking {
             ConsoleMessages.showBackOption();
             input = scanner.nextLine();
 
-            int sessionChoice = MenuUtils.catchNumberFormatException(input, filteredSessions.size());
+            int sessionChoice = MenuUtils.parseMenuInput(input, filteredSessions.size());
 
             if (sessionChoice == -1) continue;
             if (sessionChoice == 0) return;
@@ -105,9 +105,9 @@ public class CreateBooking {
             }
             ConsoleMessages.showBackOption();
             String selectedOption = scanner.nextLine();
-            var selectedNumber = MenuUtils.catchNumberFormatException(selectedOption, lessons.size());
+            var selectedNumber = MenuUtils.parseMenuInput(selectedOption, lessons.size());
             if (selectedNumber == -1) {
-                BookByLessonMenu(lessons, sessions, member, bookingId);
+                continue;
             }
             if (selectedNumber == 0) return;
             else {
@@ -126,8 +126,8 @@ public class CreateBooking {
                     ConsoleMessages.showBackOption();
 
                     selectedOption = scanner.nextLine();
-                    var selectedOptionNumber = MenuUtils.catchNumberFormatException(selectedOption, sessions.size());
-                    if (selectedOptionNumber == -1) break;
+                    var selectedOptionNumber = MenuUtils.parseMenuInput(selectedOption, sessions.size());
+                    if (selectedOptionNumber == -1) continue;
                     if (selectedOptionNumber == 0) return;
                     else {
                         int sessionIndex = selectedOptionNumber - 1;
@@ -146,20 +146,21 @@ public class CreateBooking {
             ConsoleTextUtils.printInRed("The session is already full");
             return;
         }
-
-
         if (member == null) return;
+
+        if (bookingService.isThisSessionBookedBySameMember(selectedSession, member)) {
+            ConsoleTextUtils.printInRed("you can not book a session two times");
+            return;
+        }
+
         if (bookingId == null) {
             bookingService.create(member, selectedSession);
             ConsoleTextUtils.printInGreen("Booking has been created successfully, here's the detail:");
         } else {
-            if (bookingService.isThisSessionBookedBySameMember(selectedSession, member)) {
-                ConsoleTextUtils.printInRed("you can not book a session two times");
-                return;
-            }
 
             if (!bookingService.changeBookingsSession(bookingId, selectedSession)) {
                 ConsoleTextUtils.printInRed("Cannot change an attended/cancelled booking");
+                return;
             }
             ConsoleTextUtils.printInGreen("Booking has been changed successfully, here's the detail:");
         }

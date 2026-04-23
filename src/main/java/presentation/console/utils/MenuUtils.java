@@ -6,12 +6,13 @@ import domain.entities.Member;
 import domain.enums.BookingStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class MenuUtils {
 
-    public static int catchNumberFormatException(String userInput, int listSize) {
+    public static int parseMenuInput(String userInput, int listSize) {
         int number = -1;
         try {
             number = Integer.parseInt(userInput);
@@ -30,7 +31,7 @@ public class MenuUtils {
 
     public static @Nullable Member findMember(List<Member> members, Scanner scanner) {
         String inputString = scanner.nextLine();
-        var inputNumber = MenuUtils.catchNumberFormatException(inputString, members.size());
+        var inputNumber = MenuUtils.parseMenuInput(inputString, members.size());
         if (inputNumber == -1 || inputNumber == 0) {
             return null;
         }
@@ -41,8 +42,8 @@ public class MenuUtils {
     public static void showMemberList(List<Member> members, String intro) {
         ConsoleMessages.showSelectOptionMessage("Member");
         System.out.println(intro);
-        for (Member m : members) {
-            System.out.println(members.indexOf(m) + 1 + " - " + (m.toString()));
+        for (int i = 0; i < members.size(); i++) {
+            System.out.println((i + 1) + " - " + members.get(i));
         }
         ConsoleMessages.showBackOption();
     }
@@ -51,7 +52,7 @@ public class MenuUtils {
         showBookingList(memberBookings);
 
         String selectedOption = scanner.nextLine();
-        var selectedNumber = MenuUtils.catchNumberFormatException(selectedOption, memberBookings.size());
+        var selectedNumber = MenuUtils.parseMenuInput(selectedOption, memberBookings.size());
         if (selectedNumber == -1 || selectedNumber == 0) {
             return null;
         }
@@ -60,8 +61,8 @@ public class MenuUtils {
     }
 
     public static void showBookingList(List<Booking> memberBookings) {
-        for (Booking booking : memberBookings) {
-            System.out.println(memberBookings.indexOf(booking) + 1 + "- " + booking.toString());
+        for (int i = 0; i < memberBookings.size(); i++) {
+            System.out.println((i + 1) + " - " + memberBookings.get(i));
         }
         ConsoleMessages.showBackOption();
     }
@@ -72,14 +73,16 @@ public class MenuUtils {
 
         ConsoleMessages.showSelectOptionMessage("Booked classes for" + member.toString());
 
-        List<Booking> memberBookings = bookingService.getByMemberIdAndStatus(member.getId(), BookingStatus.Booked);
+        List<Booking> memberBookings = new ArrayList<>(
+                bookingService.getByMemberIdAndStatus(member.getId(), BookingStatus.Booked)
+        );
+
         List<Booking> changedBookings = bookingService.getByMemberIdAndStatus(member.getId(), BookingStatus.Changed);
-        if (!changedBookings.isEmpty()) {
-            memberBookings.addAll(changedBookings);
-        }
+
+        memberBookings.addAll(changedBookings);
 
         if (memberBookings.isEmpty()) {
-            ConsoleTextUtils.printInRed("⚠ ⚠ There are no classes for this member to cancel/change. ⚠ ⚠");
+            ConsoleTextUtils.printInRed("⚠ ⚠ There are no classes for this member. ⚠ ⚠");
             return null;
         }
         return memberBookings;

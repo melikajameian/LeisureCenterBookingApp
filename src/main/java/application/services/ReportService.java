@@ -20,7 +20,7 @@ public class ReportService {
 
     public String getMonthlyLessonReport(int monthNumber) {
 
-        Month month = Month.getRateByNumber(monthNumber);
+        Month month = Month.getMonthByNumber(monthNumber);
 
         List<Session> sessions = sessionService.getSessionsByMonth(month);
         List<Lesson> lessons = lessonService.getLessons();
@@ -35,19 +35,10 @@ public class ReportService {
                     .append(lesson.getLessonType().name())
                     .append("\n   ");
 
-            List<Session> lessonSessions = sessions.stream()
-                    .filter(s -> s.getLesson() == lesson)
-                    .toList();
 
             List<Booking> allAttendedBookings = new ArrayList<>();
 
-            for (Session session : lessonSessions) {
-                allAttendedBookings.addAll(
-                        sessionService.getAttendedBookings(session)
-                );
-            }
-
-            int totalAttendees = allAttendedBookings.size();
+            int attendees = getAttendees(lesson, sessions,allAttendedBookings);
 
             double averageRating = allAttendedBookings.stream()
                     .mapToInt(b -> b.getReview().getRate().getRateNumber())
@@ -55,7 +46,7 @@ public class ReportService {
                     .orElse(0);
 
             result.append("Total Attendees: ")
-                    .append(totalAttendees)
+                    .append(attendees)
                     .append("\n   ");
 
             result.append("Average Rating: ")
@@ -68,7 +59,7 @@ public class ReportService {
 
     public String getChampionReport(int monthNumber) {
 
-        Month month = Month.getRateByNumber(monthNumber);
+        Month month = Month.getMonthByNumber(monthNumber);
 
         List<Session> sessions = sessionService.getSessionsByMonth(month);
         List<Lesson> lessons = lessonService.getLessons();
@@ -82,19 +73,9 @@ public class ReportService {
 
         for (Lesson lesson : lessons) {
 
-            List<Session> lessonSessions = sessions.stream()
-                    .filter(s -> s.getLesson().equals(lesson))
-                    .toList();
-
             List<Booking> allAttendedBookings = new ArrayList<>();
 
-            for (Session session : lessonSessions) {
-                allAttendedBookings.addAll(
-                        sessionService.getAttendedBookings(session)
-                );
-            }
-
-            int attendees = allAttendedBookings.size();
+            int attendees = getAttendees(lesson, sessions,allAttendedBookings);
 
             double income = attendees * lesson.getPrice();
 
@@ -114,5 +95,20 @@ public class ReportService {
         result.append("Highest Income: £").append(maxIncome).append("\n");
 
         return result.toString();
+    }
+
+    private int getAttendees(Lesson lesson, List<Session> sessions, List<Booking> allAttendedBookings) {
+        List<Session> lessonSessions = sessions.stream()
+                .filter(s -> s.getLesson().equals(lesson))
+                .toList();
+
+
+        for (Session session : lessonSessions) {
+            allAttendedBookings.addAll(
+                    sessionService.getAttendedBookings(session)
+            );
+        }
+
+        return allAttendedBookings.size();
     }
 }

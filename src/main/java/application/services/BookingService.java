@@ -23,6 +23,10 @@ public class BookingService {
             throw new IllegalStateException("Session is full");
         }
 
+        if (isThisSessionBookedBySameMember(session, member)) {
+            throw new IllegalStateException("Duplicate booking not allowed");
+        }
+
         Booking booking = new Booking(member, session);
 
         bookingRepository.add(booking);
@@ -68,14 +72,21 @@ public class BookingService {
         if (booking.isEmpty()) {
             return false;
         }
-
         if (booking.get().getStatus() == BookingStatus.Cancelled || booking.get().getStatus() == BookingStatus.Attended) {
             return false;
         }
+        if (isThisSessionBookedBySameMember(selectedSession, booking.get().getMember())) {
+            return false;
+        }
+        if (selectedSession.isFull()) return false;
 
+        booking.get().getSession().removeBooking(booking.get());
+        selectedSession.addBooking(booking.get());
+        booking.get().setSession(selectedSession);
         booking.get().setStatus(BookingStatus.Changed);
-        selectedSession.removeBooking(booking.get());
+
         bookingRepository.save();
+
         return true;
     }
 

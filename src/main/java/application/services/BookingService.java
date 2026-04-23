@@ -7,6 +7,7 @@ import domain.enums.BookingStatus;
 import domain.repositories.BookingRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public class BookingService {
 
@@ -29,36 +30,51 @@ public class BookingService {
     }
 
     public boolean markAsAttended(String bookingId) {
-        Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new RuntimeException("Booking not found"));
+        Optional<Booking> booking = bookingRepository.findById(bookingId);
 
-        if(booking==null){
+        if(booking.isEmpty()){
             return false;
         }
 
-        if (booking.getStatus() != BookingStatus.Booked) {
+        if (booking.get().getStatus() != BookingStatus.Booked) {
            return false;
         }
 
-        booking.setStatus(BookingStatus.Attended);
+        booking.get().setStatus(BookingStatus.Attended);
         bookingRepository.save();
         return true;
     }
 
     public boolean markAsCanceled(String bookingId,Session session) {
-        Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new RuntimeException("Booking not found"));
+        Optional<Booking> booking = bookingRepository.findById(bookingId);
 
-        if(booking==null){
+        if(booking.isEmpty()){
             return false;
         }
 
-        if (booking.getStatus() != BookingStatus.Booked) {
+        if (booking.get().getStatus() != BookingStatus.Booked) {
             return false;
         }
 
-        booking.setStatus(BookingStatus.Cancelled);
-        session.removeBooking(booking);
+        booking.get().setStatus(BookingStatus.Cancelled);
+        session.removeBooking(booking.get());
+        bookingRepository.save();
+        return true;
+    }
+
+    public boolean changeBookingsSession(String bookingId, Session selectedSession) {
+        Optional<Booking> booking = bookingRepository.findById(bookingId);
+
+        if(booking.isEmpty()){
+            return false;
+        }
+
+        if (booking.get().getStatus() == BookingStatus.Cancelled || booking.get().getStatus() == BookingStatus.Attended) {
+            return false;
+        }
+
+        booking.get().setStatus(BookingStatus.Changed);
+        selectedSession.removeBooking(booking.get());
         bookingRepository.save();
         return true;
     }
@@ -74,4 +90,5 @@ public class BookingService {
     public List<Booking> getAll() {
         return bookingRepository.getAll();
     }
+
 }

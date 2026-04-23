@@ -2,7 +2,6 @@ package presentation.console.Booking;
 
 import application.services.BookingService;
 import application.services.LessonService;
-import application.services.MemberService;
 import application.services.SessionService;
 import domain.entities.Lesson;
 import domain.entities.Member;
@@ -20,7 +19,7 @@ public class CreateBooking {
     private final BookingService bookingService;
 
     public CreateBooking(SessionService sessionService, LessonService lessonService, Scanner scanner,
-                         BookingService bookingService, MemberService memberService) {
+                         BookingService bookingService, Member member, String bookId) {
 
         this.sessionService = sessionService;
         this.bookingService = bookingService;
@@ -28,14 +27,18 @@ public class CreateBooking {
 
         var sessions = sessionService.getSessions();
         var lessons = lessonService.getLessons();
-        var members = memberService.getMembers();
 
-        bookClassByOptions(members, sessions, lessons);
+        bookClassByOptions(member, sessions, lessons, bookId);
     }
 
-    public void bookClassByOptions(List<Member> members, List<Session> sessions, List<Lesson> lessons) {
+    public void bookClassByOptions(Member member, List<Session> sessions, List<Lesson> lessons, String bookingId) {
         while (true) {
-            ConsoleMessages.showSelectOptionMessage("");
+            if(bookingId==null){
+                ConsoleMessages.showSelectOptionMessage("Booking for " + member.toString());
+            }else{
+                ConsoleMessages.showSelectOptionMessage("Changing Booking for " + member.toString());
+
+            }
             System.out.println("1- Book by lesson\n2- Book by date time");
             ConsoleMessages.showBackOption();
             String classByOptionInput = scanner.nextLine();
@@ -43,10 +46,10 @@ public class CreateBooking {
             var inputNumber = MenuUtils.catchNumberFormatException(classByOptionInput, sessions.size());
 
             if (inputNumber == 1) {
-                BookByLessonMenu(lessons, sessions, members);
+                BookByLessonMenu(lessons, sessions, member, bookingId);
             } else if (inputNumber == 2) {
-                BookByDateMenu(sessions, members, lessons);
-            }else {
+                BookByDateMenu(sessions, member, lessons, bookingId);
+            } else {
                 break;
             }
 
@@ -54,7 +57,7 @@ public class CreateBooking {
 
     }
 
-    private void BookByDateMenu(List<Session> sessions, List<Member> members, List<Lesson> lessons) {
+    private void BookByDateMenu(List<Session> sessions, Member member, List<Lesson> lessons, String bookingId) {
         while (true) {
             for (Session session : sessions) {
                 System.out.println(
@@ -71,8 +74,8 @@ public class CreateBooking {
             if (inputNumber == 0) {
                 return;
             } else {
-                int sessionIndex = inputNumber-1;
-                SelectUserToBookFor(sessions, members, sessionIndex);
+                int sessionIndex = inputNumber - 1;
+                bookForMember(sessions, member, sessionIndex, bookingId);
                 break;
             }
 
@@ -80,7 +83,7 @@ public class CreateBooking {
     }
 
 
-    private void BookByLessonMenu(List<Lesson> lessons, List<Session> sessions, List<Member> members) {
+    private void BookByLessonMenu(List<Lesson> lessons, List<Session> sessions, Member member, String bookingId) {
         while (true) {
             ConsoleMessages.showSelectOptionMessage("");
             System.out.println("*** (Prices are per session.)");
@@ -91,12 +94,12 @@ public class CreateBooking {
             String selectedOption = scanner.nextLine();
             var selectedNumber = MenuUtils.catchNumberFormatException(selectedOption, lessons.size());
             if (selectedNumber == -1) {
-                BookByLessonMenu(lessons, sessions, members);
+                BookByLessonMenu(lessons, sessions, member, bookingId);
             }
             if (selectedNumber == 0) {
                 return;
             } else {
-                int lessonIndex =selectedNumber-1;
+                int lessonIndex = selectedNumber - 1;
                 Lesson selectedLesson = lessons.get(lessonIndex);
                 var selectedLessonSessions = sessionService.getSessionsByLesson(selectedLesson);
                 while (true) {
@@ -118,8 +121,8 @@ public class CreateBooking {
                     if (selectedOptionNumber == 0) {
                         return;
                     } else {
-                        int sessionIndex = selectedOptionNumber-1;
-                        SelectUserToBookFor(sessions, members, sessionIndex);
+                        int sessionIndex = selectedOptionNumber - 1;
+                        bookForMember(selectedLessonSessions, member, sessionIndex, bookingId);
                         break;
                     }
                 }
@@ -128,21 +131,24 @@ public class CreateBooking {
     }
 
 
-    private void SelectUserToBookFor(List<Session> sessions, List<Member> members, int sessionIndex) {
+    private void bookForMember(List<Session> sessions, Member member, int sessionIndex, String bookingId) {
         Session selectedSession = sessions.get(sessionIndex);
-        if(selectedSession.isFull()){
+        if (selectedSession.isFull()) {
             ConsoleTextUtils.printInRed("The session is already full");
         }
 
-        MenuUtils.showMemberList(members, "(member you are booking for) \n");
-
-        Member member = MenuUtils.findMember(members, scanner);
         if (member == null) return;
-        bookingService.create(member, selectedSession);
-        ConsoleTextUtils.printInGreen("Booking has been created successfully, here's the detail:");
+        if (bookingId == null) {
+            bookingService.create(member, selectedSession);
+            ConsoleTextUtils.printInGreen("Booking has been created successfully, here's the detail:");
+        }else{
+            if (!bookingService.changeBookingsSession(bookingId,selectedSession)) {
+                ConsoleTextUtils.printInRed("Cannot change an attended/cancelled booking");
+            }
+            ConsoleTextUtils.printInGreen("Booking has been changes successfully, here's the detail:");
+        }
         System.out.println(member.toString());
         System.out.println(selectedSession.toString() + "\n");
-        return;
     }
 
 

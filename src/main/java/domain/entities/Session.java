@@ -17,6 +17,7 @@ public class Session {
         this.day = day;
         this.timeSlot = timeSlot;
         this.capacity = capacity;
+        this.bookings = new ArrayList<>();
     }
 
     public Lesson getLesson() {

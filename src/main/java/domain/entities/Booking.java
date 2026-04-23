@@ -34,6 +34,9 @@ public class Booking {
         this.status = status;
     }
 
+    public Session getSession() {
+        return session;
+    }
 
     // Generates a unique id for booking
     private static String generateBookingId(Member member) {

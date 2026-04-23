@@ -4,7 +4,9 @@ import application.services.BookingService;
 import application.services.LessonService;
 import application.services.MemberService;
 import application.services.SessionService;
+import domain.entities.Member;
 import presentation.console.ConsoleMessages;
+import presentation.console.utils.MenuUtils;
 
 import java.util.Scanner;
 
@@ -27,22 +29,24 @@ public class MainBookingMenu {
 
     public void showBookingMenu() {
         while (true) {
+            Member member = selectMember();
+
             ConsoleMessages.showSelectOptionMessage("Booking menu");
             System.out.println("1- Book a class\n2- Attend a class\n3-Change a class\n4- Cancel a class\n5- Write a review");
             ConsoleMessages.showBackOption();
             String bookingMenuInput = scanner.nextLine();
             switch (bookingMenuInput) {
                 case "1":
-                    new CreateBooking(sessionService, lessonService, scanner, bookingService, memberService);
+                    new CreateBooking(sessionService, lessonService, scanner, bookingService, member,null);
                     break;
                 case "2":
-                    new AttendClassSession(memberService,scanner, bookingService);
+                    new AttendClassSession(scanner, bookingService, member);
                     break;
                 case "3":
-                    new ChangeClassSession(memberService,scanner, bookingService);
+                    new ChangeClassSession(member,scanner, bookingService,lessonService,sessionService);
                     break;
                 case "4":
-                    new CancelClassSession(memberService,scanner, bookingService);
+                    new CancelClassSession(member,scanner, bookingService);
                     break;
                 case "5":
                     new WriteAReview();
@@ -53,6 +57,13 @@ public class MainBookingMenu {
                     ConsoleMessages.showWrongInputMessage("between 1-5");
             }
         }
+    }
+
+    private Member selectMember() {
+        var members = memberService.getMembers();
+        MenuUtils.showMemberList(members, "(member you are managing bookings for) \n");
+
+        return MenuUtils.findMember(members, scanner);
     }
 
 

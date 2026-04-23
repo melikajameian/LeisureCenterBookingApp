@@ -30,6 +30,7 @@ public class MainBookingMenu {
     public void showBookingMenu() {
             Member member = selectMember();
 
+            if (member == null) return;
             while (true) {
             ConsoleMessages.showSelectOptionMessage("Booking Menu");
             System.out.println("1- Book a class\n2- Attend a class\n3- Change a class\n4- Cancel a class\n5- Write a review");

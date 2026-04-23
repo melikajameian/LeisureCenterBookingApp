@@ -93,7 +93,7 @@ public class BookingService {
 
 
     public boolean isThisSessionBookedBySameMember(Session selectedSession, Member member) {
-        return getAll().stream().anyMatch(booking -> booking.getMember().getId().equals(member.getId()));
+        return getAll().stream().anyMatch(booking -> booking.getMember().getId().equals(member.getId()) && booking.getSession().equals(selectedSession));
     }
 
 }

@@ -6,6 +6,7 @@ import application.services.SessionService;
 import domain.entities.Lesson;
 import domain.entities.Member;
 import domain.entities.Session;
+import domain.enums.DayOfWeek;
 import presentation.console.utils.ConsoleMessages;
 import presentation.console.utils.ConsoleTextUtils;
 import presentation.console.utils.MenuUtils;
@@ -33,52 +34,61 @@ public class CreateBooking {
 
     public void bookClassByOptions(Member member, List<Session> sessions, List<Lesson> lessons, String bookingId) {
         while (true) {
-            if(bookingId==null){
-                ConsoleMessages.showSelectOptionMessage("Booking for " + member.toString());
-            }else{
-                ConsoleMessages.showSelectOptionMessage("Changing Booking for " + member.toString());
 
-            }
+            if(bookingId==null) ConsoleMessages.showSelectOptionMessage("Booking for " + member.toString());
+
+            else ConsoleMessages.showSelectOptionMessage("Changing Booking for " + member.toString());
+
             System.out.println("1- Book by lesson\n2- Book by date time");
             ConsoleMessages.showBackOption();
             String classByOptionInput = scanner.nextLine();
-
             var inputNumber = MenuUtils.catchNumberFormatException(classByOptionInput, sessions.size());
 
-            if (inputNumber == 1) {
-                BookByLessonMenu(lessons, sessions, member, bookingId);
-            } else if (inputNumber == 2) {
-                BookByDateMenu(sessions, member, lessons, bookingId);
-            } else {
-                break;
-            }
+            if (inputNumber == 1) BookByLessonMenu(lessons, sessions, member, bookingId);
+
+            else if (inputNumber == 2) BookByDayMenu(sessions, member, lessons, bookingId);
+
+            else break;
 
         }
 
     }
 
-    private void BookByDateMenu(List<Session> sessions, Member member, List<Lesson> lessons, String bookingId) {
+    private void BookByDayMenu(List<Session> sessions, Member member, List<Lesson> lessons, String bookingId) {
+
         while (true) {
-            for (Session session : sessions) {
-                System.out.println(
-                        sessions.indexOf(session) + 1 + "- " +
-                                session.toString()
-                );
+            ConsoleMessages.showSelectOptionMessage("Book by Day");
+            int counter=1;
+            for(DayOfWeek dayOfWeek : DayOfWeek.values()) {
+            System.out.println(counter+"- "+dayOfWeek.name());
+                counter++;
             }
             ConsoleMessages.showBackOption();
+
             String input = scanner.nextLine();
-            var inputNumber = MenuUtils.catchNumberFormatException(input, sessions.size());
-            if (inputNumber == -1) {
-                break;
-            }
-            if (inputNumber == 0) {
-                return;
-            } else {
-                int sessionIndex = inputNumber - 1;
-                bookForMember(sessions, member, sessionIndex, bookingId);
-                break;
+            int choice = MenuUtils.catchNumberFormatException(input, 2);
+
+            if (choice == -1) break;
+            if (choice == 0) return;
+
+            DayOfWeek selectedDay = (choice == 1) ? DayOfWeek.SATURDAY : DayOfWeek.SUNDAY;
+
+            List<Session> filteredSessions = sessionService.getSessionsByTheDayOfWeek(selectedDay);
+
+            for (Session session : filteredSessions) {
+                System.out.println(filteredSessions.indexOf(session)+1 + "- " + session.toString());
             }
 
+            ConsoleMessages.showBackOption();
+            input = scanner.nextLine();
+
+            int sessionChoice = MenuUtils.catchNumberFormatException(input, filteredSessions.size());
+
+            if (sessionChoice == -1) continue;
+            if (sessionChoice == 0) return;
+
+            bookForMember(filteredSessions, member, sessionChoice - 1, bookingId);
+            break;
         }
     }
 
@@ -96,9 +106,8 @@ public class CreateBooking {
             if (selectedNumber == -1) {
                 BookByLessonMenu(lessons, sessions, member, bookingId);
             }
-            if (selectedNumber == 0) {
-                return;
-            } else {
+            if (selectedNumber == 0) return;
+            else {
                 int lessonIndex = selectedNumber - 1;
                 Lesson selectedLesson = lessons.get(lessonIndex);
                 var selectedLessonSessions = sessionService.getSessionsByLesson(selectedLesson);
@@ -115,12 +124,9 @@ public class CreateBooking {
 
                     selectedOption = scanner.nextLine();
                     var selectedOptionNumber = MenuUtils.catchNumberFormatException(selectedOption, sessions.size());
-                    if (selectedOptionNumber == -1) {
-                        break;
-                    }
-                    if (selectedOptionNumber == 0) {
-                        return;
-                    } else {
+                    if (selectedOptionNumber == -1) break;
+                    if (selectedOptionNumber == 0) return;
+                    else {
                         int sessionIndex = selectedOptionNumber - 1;
                         bookForMember(selectedLessonSessions, member, sessionIndex, bookingId);
                         break;

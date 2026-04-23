@@ -5,6 +5,7 @@ import domain.entities.SessionDate;
 import domain.entities.Lesson;
 import domain.entities.Session;
 import domain.enums.BookingStatus;
+import domain.enums.DayOfWeek;
 import domain.enums.Month;
 import domain.enums.TimeSlot;
 import domain.repositories.SessionRepository;
@@ -45,6 +46,12 @@ public class SessionService {
     public List<Booking> getAttendedBookings(Session session) {
         return session.getBookings().stream()
                 .filter(b -> b.getStatus() == BookingStatus.Attended)
+                .toList();
+    }
+
+    public List<Session> getSessionsByTheDayOfWeek(DayOfWeek dayOfWeek) {
+        return sessionRepository.getAll().stream()
+                .filter(s -> s.getSessionDate().getDayOfWeek() == dayOfWeek)
                 .toList();
     }
 }

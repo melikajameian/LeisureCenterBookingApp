@@ -28,11 +28,11 @@ public class MainBookingMenu {
     }
 
     public void showBookingMenu() {
-        while (true) {
             Member member = selectMember();
 
-            ConsoleMessages.showSelectOptionMessage("Booking menu");
-            System.out.println("1- Book a class\n2- Attend a class\n3-Change a class\n4- Cancel a class\n5- Write a review");
+            while (true) {
+            ConsoleMessages.showSelectOptionMessage("Booking Menu");
+            System.out.println("1- Book a class\n2- Attend a class\n3- Change a class\n4- Cancel a class\n5- Write a review");
             ConsoleMessages.showBackOption();
             String bookingMenuInput = scanner.nextLine();
             switch (bookingMenuInput) {
@@ -49,7 +49,7 @@ public class MainBookingMenu {
                     new CancelClassSession(member,scanner, bookingService);
                     break;
                 case "5":
-                    new WriteAReview();
+                    new WriteAReview(member,bookingService,scanner);
                     break;
                 case "0":
                     return;

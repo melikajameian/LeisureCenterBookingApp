@@ -18,18 +18,16 @@ public class AttendClassSession {
     }
 
     public void run(BookingService bookingService,Member member) {
-        while (true) {
             if (member == null) return;
 
             List<Booking> memberBookings = MenuUtils.getBookedClassesForThisMember(member,bookingService,scanner);
             if(memberBookings==null) return;
-            Booking selectedBooking = MenuUtils.selectBookFromList(memberBookings,scanner);
+            Booking selectedBooking = MenuUtils.selectBookingFromList(memberBookings,scanner);
             if (selectedBooking == null) return;
             if(!bookingService.markAsAttended(selectedBooking.getBookingId())){
                 ConsoleTextUtils.printInRed("Cannot attend a attended/cancelled/changed booking");
             }
             ConsoleTextUtils.printInGreen("Booking has been successfully attended");
-        }
 
 
     }

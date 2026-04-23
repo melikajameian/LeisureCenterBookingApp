@@ -146,6 +146,7 @@ public class CreateBooking {
                 ConsoleTextUtils.printInRed("Cannot change an attended/cancelled booking");
             }
             ConsoleTextUtils.printInGreen("Booking has been changes successfully, here's the detail:");
+
         }
         System.out.println(member.toString());
         System.out.println(selectedSession.toString() + "\n");

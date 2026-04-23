@@ -15,4 +15,13 @@ public enum Rate {
         this.label=label;
         this.rate=rate;
     }
+
+    public static Rate getRateByNumber(int number){
+        for (Rate r : Rate.values()) {
+            if (r.rate == number) {
+                return r;
+            }
+        }
+        return null;
+    }
 }

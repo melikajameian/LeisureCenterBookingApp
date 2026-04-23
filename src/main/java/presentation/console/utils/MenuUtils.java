@@ -48,8 +48,8 @@ public class MenuUtils {
         ConsoleMessages.showBackOption();
     }
 
-    public static @Nullable Booking selectBookFromList(List<Booking> memberBookings, Scanner scanner) {
-        showBookList(memberBookings);
+    public static @Nullable Booking selectBookingFromList(List<Booking> memberBookings, Scanner scanner) {
+        showBookingList(memberBookings);
 
         String selectedOption = scanner.nextLine();
         var selectedNumber = MenuUtils.catchNumberFormatException(selectedOption, memberBookings.size());
@@ -60,7 +60,7 @@ public class MenuUtils {
         return memberBookings.get(selectedIndex);
     }
 
-    public static void showBookList(List<Booking> memberBookings) {
+    public static void showBookingList(List<Booking> memberBookings) {
         for (Booking booking : memberBookings) {
             System.out.println(memberBookings.indexOf(booking) + 1 + "- " + booking.toString());
         }

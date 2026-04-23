@@ -23,7 +23,7 @@ public class BookingService {
             throw new IllegalStateException("Session is full");
         }
 
-        Booking booking = new Booking(member,session);
+        Booking booking = new Booking(member, session);
 
         bookingRepository.add(booking);
         session.addBooking(booking);
@@ -32,12 +32,12 @@ public class BookingService {
     public boolean markAsAttended(String bookingId) {
         Optional<Booking> booking = bookingRepository.findById(bookingId);
 
-        if(booking.isEmpty()){
+        if (booking.isEmpty()) {
             return false;
         }
 
         if (booking.get().getStatus() != BookingStatus.Booked) {
-           return false;
+            return false;
         }
 
         booking.get().setStatus(BookingStatus.Attended);
@@ -45,10 +45,10 @@ public class BookingService {
         return true;
     }
 
-    public boolean markAsCanceled(String bookingId,Session session) {
+    public boolean markAsCanceled(String bookingId, Session session) {
         Optional<Booking> booking = bookingRepository.findById(bookingId);
 
-        if(booking.isEmpty()){
+        if (booking.isEmpty()) {
             return false;
         }
 
@@ -65,7 +65,7 @@ public class BookingService {
     public boolean changeBookingsSession(String bookingId, Session selectedSession) {
         Optional<Booking> booking = bookingRepository.findById(bookingId);
 
-        if(booking.isEmpty()){
+        if (booking.isEmpty()) {
             return false;
         }
 
@@ -89,6 +89,11 @@ public class BookingService {
 
     public List<Booking> getAll() {
         return bookingRepository.getAll();
+    }
+
+
+    public boolean isThisSessionBookedBySameMember(Session selectedSession, Member member) {
+        return getAll().stream().anyMatch(booking -> booking.getMember().getId().equals(member.getId()));
     }
 
 }

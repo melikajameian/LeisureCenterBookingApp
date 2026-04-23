@@ -46,7 +46,7 @@ public class CreateBooking {
 
             if (inputNumber == 1) BookByLessonMenu(lessons, sessions, member, bookingId);
 
-            else if (inputNumber == 2) BookByDayMenu(sessions, member, lessons, bookingId);
+            else if (inputNumber == 2) BookByDayMenu( member, bookingId);
 
             else break;
 
@@ -54,7 +54,7 @@ public class CreateBooking {
 
     }
 
-    private void BookByDayMenu(List<Session> sessions, Member member, List<Lesson> lessons, String bookingId) {
+    private void BookByDayMenu( Member member, String bookingId) {
 
         while (true) {
             ConsoleMessages.showSelectOptionMessage("Book by Day");
@@ -141,6 +141,11 @@ public class CreateBooking {
         Session selectedSession = sessions.get(sessionIndex);
         if (selectedSession.isFull()) {
             ConsoleTextUtils.printInRed("The session is already full");
+            return;
+        }
+        if(bookingService.isThisSessionBookedBySameMember(selectedSession,member)){
+            ConsoleTextUtils.printInRed("you can not book a session two times");
+            return;
         }
 
         if (member == null) return;

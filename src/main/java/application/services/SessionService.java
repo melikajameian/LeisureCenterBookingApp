@@ -1,9 +1,6 @@
 package application.services;
 
-import domain.entities.Booking;
-import domain.entities.SessionDate;
-import domain.entities.Lesson;
-import domain.entities.Session;
+import domain.entities.*;
 import domain.enums.BookingStatus;
 import domain.enums.DayOfWeek;
 import domain.enums.Month;
@@ -54,4 +51,5 @@ public class SessionService {
                 .filter(s -> s.getSessionDate().getDayOfWeek() == dayOfWeek)
                 .toList();
     }
+
 }

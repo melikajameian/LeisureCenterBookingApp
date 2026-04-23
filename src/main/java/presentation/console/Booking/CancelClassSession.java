@@ -18,7 +18,7 @@ public class CancelClassSession {
     }
 
     public void run(Member member, BookingService bookingService) {
-            List<Booking> memberBookings = MenuUtils.getBookedClassesForThisMember(member,bookingService,scanner);
+            List<Booking> memberBookings = MenuUtils.getBookedClassesForThisMember(member,bookingService);
             if(memberBookings==null) return;
             Booking selectedBooking = MenuUtils.selectBookingFromList(memberBookings, scanner);
 

@@ -5,10 +5,10 @@ import domain.enums.BookingStatus;
 import java.time.LocalDateTime;
 
 public class Booking {
-    private String bookingId;
-    private Member member;
+    private final String bookingId;
+    private final Member member;
     private BookingStatus status;
-    private Session session;
+    private final Session session;
     private Review review;
 
     public Booking(Member member,Session session) {

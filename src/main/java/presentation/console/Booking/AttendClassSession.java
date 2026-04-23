@@ -20,7 +20,7 @@ public class AttendClassSession {
     public void run(BookingService bookingService,Member member) {
             if (member == null) return;
 
-            List<Booking> memberBookings = MenuUtils.getBookedClassesForThisMember(member,bookingService,scanner);
+            List<Booking> memberBookings = MenuUtils.getBookedClassesForThisMember(member,bookingService);
             if(memberBookings==null) return;
             Booking selectedBooking = MenuUtils.selectBookingFromList(memberBookings,scanner);
             if (selectedBooking == null) return;

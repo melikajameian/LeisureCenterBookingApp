@@ -36,6 +36,10 @@ public class Session {
         return capacity == bookings.size();
     }
 
+    public ArrayList<Booking> getBookings() {
+        return bookings;
+    }
+
     public void addBooking(Booking booking) {
         bookings.add(booking);
     }

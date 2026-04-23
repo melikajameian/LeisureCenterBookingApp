@@ -1,7 +1,4 @@
-import application.services.BookingService;
-import application.services.LessonService;
-import application.services.MemberService;
-import application.services.SessionService;
+import application.services.*;
 import domain.repositories.BookingRepository;
 import domain.repositories.LessonRepository;
 import domain.repositories.MemberRepository;
@@ -23,12 +20,13 @@ public class LeisureCenterBookingMain {
         MemberService memberService = new MemberService(memberRepository);
         SessionService sessionService = new SessionService(sessionRepository);
         BookingService bookingService = new BookingService(bookingRepository);
+        ReportService reportService = new ReportService(sessionService,lessonService);
 
 
         DataFactory.initialize(lessonService, memberService, sessionService);
 
         Scanner scanner = new Scanner(System.in);
-        MainMenu mainMenu = new MainMenu(scanner, sessionService, lessonService, memberService, bookingService );
+        MainMenu mainMenu = new MainMenu(scanner, sessionService, lessonService, memberService, bookingService ,reportService);
 
 
         mainMenu.start();

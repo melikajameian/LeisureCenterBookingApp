@@ -5,7 +5,7 @@ import application.services.LessonService;
 import application.services.MemberService;
 import application.services.SessionService;
 import domain.entities.Member;
-import presentation.console.ConsoleMessages;
+import presentation.console.utils.ConsoleMessages;
 import presentation.console.utils.MenuUtils;
 
 import java.util.Scanner;

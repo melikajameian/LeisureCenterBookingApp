@@ -19,7 +19,7 @@ public class ChangeClassSession {
     }
 
     public void run(Member member, BookingService bookingService,SessionService sessionService,LessonService lessonService) {
-            List<Booking> memberBookings = MenuUtils.getBookedClassesForThisMember(member,bookingService,scanner);
+            List<Booking> memberBookings = MenuUtils.getBookedClassesForThisMember(member,bookingService);
             if(memberBookings==null) return;
 
             Booking selectedBooking = MenuUtils.selectBookingFromList(memberBookings, scanner);

@@ -5,7 +5,6 @@ import domain.entities.Booking;
 import domain.entities.Member;
 import domain.enums.BookingStatus;
 import org.jetbrains.annotations.Nullable;
-import presentation.console.ConsoleMessages;
 
 import java.util.List;
 import java.util.Scanner;
@@ -68,7 +67,7 @@ public class MenuUtils {
     }
 
 
-    public static List<Booking> getBookedClassesForThisMember(Member member, BookingService bookingService, Scanner scanner) {
+    public static List<Booking> getBookedClassesForThisMember(Member member, BookingService bookingService) {
         if (member == null) return null;
 
         ConsoleMessages.showSelectOptionMessage("Booked classes for" + member.toString());

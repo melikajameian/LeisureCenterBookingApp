@@ -21,4 +21,14 @@ public enum Month {
 
     public final int monthNumber;
     public final String monthName;
+
+
+    public static Month getRateByNumber(int number){
+        for (Month m : Month.values()) {
+            if (m.monthNumber == number) {
+                return m;
+            }
+        }
+        return null;
+    }
 }

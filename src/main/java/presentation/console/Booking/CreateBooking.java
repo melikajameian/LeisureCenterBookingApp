@@ -6,7 +6,7 @@ import application.services.SessionService;
 import domain.entities.Lesson;
 import domain.entities.Member;
 import domain.entities.Session;
-import presentation.console.ConsoleMessages;
+import presentation.console.utils.ConsoleMessages;
 import presentation.console.utils.ConsoleTextUtils;
 import presentation.console.utils.MenuUtils;
 

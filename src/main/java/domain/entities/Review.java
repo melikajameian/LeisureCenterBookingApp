@@ -9,6 +9,14 @@ public class Review {
         this.rate = rate;
     }
 
-    private String description;
-    private Rate rate;
+    private final String description;
+    private final Rate rate;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Rate getRate() {
+        return rate;
+    }
 }

@@ -5,7 +5,7 @@ import domain.entities.Booking;
 import domain.entities.Member;
 import domain.entities.Review;
 import domain.enums.Rate;
-import presentation.console.ConsoleMessages;
+import presentation.console.utils.ConsoleMessages;
 import presentation.console.utils.ConsoleTextUtils;
 import presentation.console.utils.MenuUtils;
 

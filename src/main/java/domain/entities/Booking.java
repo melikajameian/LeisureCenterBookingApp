@@ -11,9 +11,10 @@ public class Booking {
     private Session session;
     private Review review;
 
-    public Booking(Member member) {
+    public Booking(Member member,Session session) {
         this.bookingId = generateBookingId(member);
         this.member = member;
+        this.session = session;
         this.status = BookingStatus.Booked;
     }
 
@@ -33,9 +34,6 @@ public class Booking {
         this.status = status;
     }
 
-    public void setSession(Session session) {
-        this.session = session;
-    }
 
     // Generates a unique id for booking
     private static String generateBookingId(Member member) {

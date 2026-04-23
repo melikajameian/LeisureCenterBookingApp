@@ -17,14 +17,14 @@ public class SessionService {
         this.sessionRepository = sessionRepository;
     }
 
-    public void createSession(Lesson lesson, SessionDate date, TimeSlot timeSlot){
+    public void createSession(Lesson lesson, SessionDate date, TimeSlot timeSlot, int capacity){
         if (sessionRepository.exists(lesson, date, timeSlot)) {
             throw new IllegalStateException
                     ("Session already exists for this lesson, date, and time");
         }
 
 
-        Session session = new Session(lesson, date, timeSlot);
+        Session session = new Session(lesson, date, timeSlot,capacity);
         sessionRepository.add(session);    }
 
 

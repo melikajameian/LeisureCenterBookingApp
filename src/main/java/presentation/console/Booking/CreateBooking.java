@@ -130,6 +130,9 @@ public class CreateBooking {
 
     private void SelectUserToBookFor(List<Session> sessions, List<Member> members, int sessionIndex) {
         Session selectedSession = sessions.get(sessionIndex);
+        if(selectedSession.isFull()){
+            ConsoleTextUtils.printInRed("The session is already full");
+        }
 
         MenuUtils.showMemberList(members, "(member you are booking for) \n");
 

@@ -18,11 +18,14 @@ public class BookingService {
     }
 
     public void create(Member member, Session session) {
+        if (session.isFull()) {
+            throw new IllegalStateException("Session is full");
+        }
 
-        Booking booking = new Booking(member);
-        booking.setSession(session);
+        Booking booking = new Booking(member,session);
+
         bookingRepository.add(booking);
-
+        session.addBooking(booking);
     }
 
     public boolean markAsAttended(String bookingId) {

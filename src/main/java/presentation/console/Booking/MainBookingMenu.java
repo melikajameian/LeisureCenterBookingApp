@@ -45,7 +45,7 @@ public class MainBookingMenu {
                     new CancelClassSession(memberService,scanner, bookingService);
                     break;
                 case "5":
-                    System.out.println("5");
+                    new WriteAReview();
                     break;
                 case "0":
                     return;

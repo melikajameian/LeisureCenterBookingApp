@@ -8,6 +8,7 @@ import domain.entities.SessionDate;
 import domain.enums.LessonType;
 import domain.enums.Month;
 import domain.enums.TimeSlot;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
@@ -33,11 +34,15 @@ public class SessionFactory {
         // Generating sessions for two weeks
         for(Month month : months ){
             for (int monthDay : monthDays) {
-                sessionService.createSession(lessons[generate.nextInt(5)], new SessionDate(month, monthDay), morning);
-                sessionService.createSession(lessons[generate.nextInt(5)], new SessionDate(month, monthDay), afternoon);
-                sessionService.createSession(lessons[generate.nextInt(5)], new SessionDate(month, monthDay), evening);
+                sessionService.createSession(lessons[generate.nextInt(5)], getSessionDate(month, monthDay), morning,4);
+                sessionService.createSession(lessons[generate.nextInt(5)], getSessionDate(month, monthDay), afternoon, 2);
+                sessionService.createSession(lessons[generate.nextInt(5)], getSessionDate(month, monthDay), evening, 3);
             }
         }
+    }
+
+    private static SessionDate getSessionDate(Month month, int monthDay) {
+        return new SessionDate(month, monthDay);
     }
 
 }

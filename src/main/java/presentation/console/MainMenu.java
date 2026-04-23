@@ -30,7 +30,7 @@ public class MainMenu {
         ConsoleMessages.showWelcomingText();
 
         while (true) {
-            ConsoleMessages.showSelectOptionMessage("");
+            ConsoleMessages.showSelectOptionMessage("Main Menu");
             System.out.println("1- Booking menu\n2- Report menu");
             String input = scanner.nextLine();
 
@@ -38,8 +38,7 @@ public class MainMenu {
             if (input.equals("1")) {
                 new MainBookingMenu(sessionService, lessonService, scanner, bookingService, memberService);
             } else if (input.equals("2")) {
-                ReportMainMenu.showReportMenu(scanner, reportService);
-                break;
+                new ReportMainMenu(scanner, reportService);
             } else
                 ConsoleMessages.showWrongInputMessage("1 or 2");
         }

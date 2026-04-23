@@ -27,8 +27,9 @@ public class ReportService {
 
         StringBuilder result = new StringBuilder();
 
-        result.append("\n *** Monthly Lesson Report for month ").append(monthNumber).append("\n");
+        result.append("\n *** Monthly Lesson Report: ").append(month).append("\n");
         for (Lesson lesson : lessons) {
+            result.append("\n------------------------\n");
 
             result.append("Lesson: ")
                     .append(lesson.getLessonType().name())
@@ -61,6 +62,56 @@ public class ReportService {
                     .append(((int)(averageRating * 100)) / 100.0)
                     .append("\n\n");
         }
+
+        return result.toString();
+    }
+
+    public String getChampionReport(int monthNumber) {
+
+        Month month = Month.getRateByNumber(monthNumber);
+
+        List<Session> sessions = sessionService.getSessionsByMonth(month);
+        List<Lesson> lessons = lessonService.getLessons();
+
+        StringBuilder result = new StringBuilder();
+
+        String championLesson = "";
+        double maxIncome = 0;
+
+        result.append("*** Champion Report: ").append(month).append("\n");
+
+        for (Lesson lesson : lessons) {
+
+            List<Session> lessonSessions = sessions.stream()
+                    .filter(s -> s.getLesson().equals(lesson))
+                    .toList();
+
+            List<Booking> allAttendedBookings = new ArrayList<>();
+
+            for (Session session : lessonSessions) {
+                allAttendedBookings.addAll(
+                        sessionService.getAttendedBookings(session)
+                );
+            }
+
+            int attendees = allAttendedBookings.size();
+
+            double income = attendees * lesson.getPrice();
+
+            result.append(lesson.getLessonType().name())
+                    .append(" → £")
+                    .append(income)
+                    .append("\n");
+
+            if (income > maxIncome) {
+                maxIncome = income;
+                championLesson = lesson.getLessonType().name();
+            }
+        }
+
+        result.append("\n------------------------\n");
+        result.append("Champion Lesson: ").append(championLesson).append("\n");
+        result.append("Highest Income: £").append(maxIncome).append("\n");
 
         return result.toString();
     }

@@ -3,7 +3,7 @@ package presentation.console.utils;
 public class ConsoleMessages {
     public static void showWelcomingText() {
         ConsoleTextUtils.printInYellow("====================                                 ====================");
-        ConsoleTextUtils.printInYellow("˶ᵔ ᵕ ᵔ˶ Welcome to The Furzefield Leisure Centre booking program. ˶ᵔ ᵕ ᵔ˶");
+        ConsoleTextUtils.printInYellow(">>>>>> Welcome to The Furzefield Leisure Centre booking program. <<<<<<");
         ConsoleTextUtils.printInYellow("====================                                 ====================\n");
     }
 

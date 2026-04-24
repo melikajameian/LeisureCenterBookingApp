@@ -36,4 +36,8 @@ public class SessionDate {
     public String getFullDateString(){
         return dayNumberInMonth + " " + month.monthName + " " + dayOfWeek.name().toLowerCase();
     }
+
+    public int getDayNumberInMonth() {
+        return dayNumberInMonth;
+    }
 }

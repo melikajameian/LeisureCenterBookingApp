@@ -40,16 +40,18 @@ public class ReportService {
 
         Map<Integer, List<Session>> sessionsByDay = new LinkedHashMap<>();
         for (Session session : orderedSessions) {
-            int day = session.getSessionDate().getDayOfWeek().ordinal();
+            int day = session.getSessionDate().getDayNumberInMonth();
             sessionsByDay.computeIfAbsent(day, key -> new ArrayList<>()).add(session);
         }
 
         for (List<Session> daySessions : sessionsByDay.values()) {
             Session firstSessionOfDay = daySessions.get(0);
             result.append("\n")
-                    .append(firstSessionOfDay.getSessionDate().getDayOfWeek().name())
+                    .append(firstSessionOfDay.getSessionDate().getDayOfWeek().name().toLowerCase())
                     .append(" ")
-                    .append(firstSessionOfDay.getSessionDate().getMonth().monthName)
+                    .append(firstSessionOfDay.getSessionDate().getDayNumberInMonth())
+                    .append(" ")
+                    .append(firstSessionOfDay.getSessionDate().getMonth().monthName.toLowerCase())
                     .append(":\n");
 
             Map<LessonType, List<Booking>> attendedBookingsByLesson = new LinkedHashMap<>();

@@ -2,16 +2,16 @@ package presentation.console.utils;
 
 public class ConsoleMessages {
     public static void showWelcomingText() {
-        ConsoleTextUtils.printInYellow("⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘                                 ⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘");
+        ConsoleTextUtils.printInYellow("====================                                 ====================");
         ConsoleTextUtils.printInYellow("˶ᵔ ᵕ ᵔ˶ Welcome to The Furzefield Leisure Centre booking program. ˶ᵔ ᵕ ᵔ˶");
-        ConsoleTextUtils.printInYellow("⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘                                 ⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘\n");
+        ConsoleTextUtils.printInYellow("====================                                 ====================\n");
     }
 
     public static void showIntroText(String intro) {
-        ConsoleTextUtils.printInYellow("\n⫘⫘⫘⫘ "+intro+" ⫘⫘⫘⫘");    }
+        ConsoleTextUtils.printInYellow("\n======= "+intro+" =======");    }
 
     public static void showSelectOptionMessage(String intro) {
-        if(!intro.isEmpty())ConsoleTextUtils.printInYellow("\n⫘⫘⫘⫘ "+intro+" ⫘⫘⫘⫘");
+        if(!intro.isEmpty())ConsoleTextUtils.printInYellow("\n======= "+intro+" =======");
         ConsoleTextUtils.printInYellow("Select an option: ");
 
     }

@@ -61,7 +61,7 @@ public class Booking {
     @Override
     public String toString() {
         return member.toString()
-                + ": \n       ⤷" + session.toString()
+                + ": \n       ⤷ Booking detail" + session.toString()
                 + " ›››› " + status.toString();
     }
 }

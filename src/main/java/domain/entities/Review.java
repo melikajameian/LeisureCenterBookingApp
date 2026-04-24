@@ -19,4 +19,9 @@ public class Review {
     public Rate getRate() {
         return rate;
     }
+
+    @Override
+    public String toString() {
+        return rate.toString() + "\n       ⤷ Review ~> " + description;
+    }
 }

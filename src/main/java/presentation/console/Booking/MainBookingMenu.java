@@ -33,7 +33,7 @@ public class MainBookingMenu {
             if (member == null) return;
             while (true) {
             ConsoleMessages.showSelectOptionMessage("Booking Menu");
-            System.out.println("1- Book a class\n2- Attend a class\n3- Change a class\n4- Cancel a class\n5- Write a review");
+            System.out.println("1- Book a class\n2- Attend a class\n3- Change a class\n4- Cancel a class\n5- Write a review\n6- show member bookings");
             ConsoleMessages.showBackOption();
             String bookingMenuInput = scanner.nextLine();
             switch (bookingMenuInput) {
@@ -52,6 +52,8 @@ public class MainBookingMenu {
                 case "5":
                     new WriteAReview(member,bookingService,scanner);
                     break;
+                case "6":
+                    new ShowMemberBookings(member,bookingService);
                 case "0":
                     return;
                 default:

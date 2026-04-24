@@ -29,10 +29,6 @@ public class SessionDate {
         return month;
     }
 
-    public int getDayNumberInMonth() {
-        return dayNumberInMonth;
-    }
-
     public DayOfWeek getDayOfWeek() {
         return dayOfWeek;
     }

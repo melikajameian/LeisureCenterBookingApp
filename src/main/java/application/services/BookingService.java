@@ -56,7 +56,7 @@ public class BookingService {
             return false;
         }
 
-        if (booking.get().getStatus() != BookingStatus.Booked) {
+        if (booking.get().getStatus() == BookingStatus.Attended || booking.get().getStatus() == BookingStatus.Cancelled) {
             return false;
         }
 

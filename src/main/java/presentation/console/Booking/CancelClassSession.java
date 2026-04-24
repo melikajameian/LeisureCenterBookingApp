@@ -24,7 +24,7 @@ public class CancelClassSession {
 
             if (selectedBooking==null) return;
             if (!bookingService.markAsCanceled(selectedBooking.getBookingId(), selectedBooking.getSession())) {
-                ConsoleTextUtils.printInRed("Cannot cancel an attended/cancelled/changed booking");
+                ConsoleTextUtils.printInRed("Cannot cancel an already attended/cancelled booking");
             }
             ConsoleTextUtils.printInGreen("Booking has been successfully canceled");
 

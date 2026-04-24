@@ -4,6 +4,7 @@ import application.services.*;
 import presentation.console.Booking.MainBookingMenu;
 import presentation.console.Report.ReportMainMenu;
 import presentation.console.utils.ConsoleMessages;
+import presentation.console.utils.ConsoleTextUtils;
 
 import java.util.Scanner;
 
@@ -32,6 +33,7 @@ public class MainMenu {
         while (true) {
             ConsoleMessages.showSelectOptionMessage("Main Menu");
             System.out.println("1- Booking menu\n2- Report menu");
+            ConsoleTextUtils.printInYellow("0- Exit Application");
             String input = scanner.nextLine();
 
 
@@ -39,8 +41,11 @@ public class MainMenu {
                 new MainBookingMenu(sessionService, lessonService, scanner, bookingService, memberService);
             } else if (input.equals("2")) {
                 new ReportMainMenu(scanner, reportService);
+            } else if (input.equals("0")) {
+                System.out.println("Goodbye!");
+                return;
             } else
-                ConsoleMessages.showWrongInputMessage("1 or 2");
+                ConsoleMessages.showWrongInputMessage("1, 2 or 0");
         }
     }
 

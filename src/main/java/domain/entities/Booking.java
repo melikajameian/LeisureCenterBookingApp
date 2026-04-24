@@ -39,7 +39,7 @@ public class Booking {
     }
 
     // Generates a unique id for booking
-    private static String generateBookingId(Member member) {
+    private String generateBookingId(Member member) {
         return member.getFirstName().charAt(0)
                 + member.getId().substring(0, 2)
                 + member.getLastName().charAt(0)

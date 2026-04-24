@@ -45,7 +45,7 @@ public class ReportService {
         }
 
         for (List<Session> daySessions : sessionsByDay.values()) {
-            Session firstSessionOfDay = daySessions.getFirst();
+            Session firstSessionOfDay = daySessions.get(0);
             result.append("\n")
                     .append(firstSessionOfDay.getSessionDate().getDayOfWeek().name())
                     .append(" ")

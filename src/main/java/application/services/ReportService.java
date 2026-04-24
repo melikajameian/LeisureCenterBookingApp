@@ -3,10 +3,14 @@ package application.services;
 import domain.entities.Booking;
 import domain.entities.Lesson;
 import domain.entities.Session;
+import domain.enums.LessonType;
 import domain.enums.Month;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ReportService {
 
@@ -19,39 +23,60 @@ public class ReportService {
     }
 
     public String getMonthlyLessonReport(int monthNumber) {
-
         Month month = Month.getMonthByNumber(monthNumber);
+        if (month == null) {
+            return "Invalid month selected.";
+        }
 
         List<Session> sessions = sessionService.getSessionsByMonth(month);
-        List<Lesson> lessons = lessonService.getLessons();
+        if (sessions.isEmpty()) {
+            return "\n *** Monthly Lesson Report: " + month + "\nNo sessions found.\n";
+        }
+
+        List<Session> orderedSessions = sessions.stream()
+                .sorted(Comparator
+                        .comparingInt((Session s) -> s.getSessionDate().getDayNumberInMonth())
+                        .thenComparing(Session::getTimeSlot))
+                .toList();
 
         StringBuilder result = new StringBuilder();
-
         result.append("\n *** Monthly Lesson Report: ").append(month).append("\n");
-        for (Lesson lesson : lessons) {
-            result.append("\n------------------------\n");
 
-            result.append("Lesson: ")
-                    .append(lesson.getLessonType().name())
-                    .append("\n   ");
+        Map<Integer, List<Session>> sessionsByDay = new LinkedHashMap<>();
+        for (Session session : orderedSessions) {
+            int day = session.getSessionDate().getDayNumberInMonth();
+            sessionsByDay.computeIfAbsent(day, key -> new ArrayList<>()).add(session);
+        }
 
+        for (List<Session> daySessions : sessionsByDay.values()) {
+            Session firstSessionOfDay = daySessions.getFirst();
+            result.append("\n")
+                    .append(firstSessionOfDay.getSessionDate().getFullDateString())
+                    .append(":\n");
 
-            List<Booking> allAttendedBookings = new ArrayList<>();
+            Map<LessonType, List<Booking>> attendedBookingsByLesson = new LinkedHashMap<>();
+            for (Session session : daySessions) {
+                LessonType lessonType = session.getLesson().getLessonType();
+                attendedBookingsByLesson
+                        .computeIfAbsent(lessonType, key -> new ArrayList<>())
+                        .addAll(sessionService.getAttendedBookings(session));
+            }
 
-            int attendees = getAttendees(lesson, sessions,allAttendedBookings);
+            for (Map.Entry<LessonType, List<Booking>> entry : attendedBookingsByLesson.entrySet()) {
+                List<Booking> attendedBookings = entry.getValue();
+                double averageRating = attendedBookings.stream()
+                        .filter(b -> b.getReview() != null)
+                        .mapToInt(b -> b.getReview().getRate().getRateNumber())
+                        .average()
+                        .orElse(0);
 
-            double averageRating = allAttendedBookings.stream()
-                    .mapToInt(b -> b.getReview().getRate().getRateNumber())
-                    .average()
-                    .orElse(0);
-
-            result.append("Total Attendees: ")
-                    .append(attendees)
-                    .append("\n   ");
-
-            result.append("Average Rating: ")
-                    .append(((int)(averageRating * 100)) / 100.0)
-                    .append("\n\n");
+                result.append(entry.getKey().name())
+                        .append(": average => ")
+                        .append(((int) (averageRating * 100)) / 100.0)
+                        .append(", attendees => ")
+                        .append(attendedBookings.size())
+                        .append("\n");
+            }
         }
 
         return result.toString();

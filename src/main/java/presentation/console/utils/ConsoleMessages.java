@@ -23,4 +23,8 @@ public class ConsoleMessages {
     public static void showBackOption() {
         ConsoleTextUtils.printInYellow("0- back");
     }
+
+    public static void showExitOption() {
+        ConsoleTextUtils.printInYellow("0- exit application");
+    }
 }
